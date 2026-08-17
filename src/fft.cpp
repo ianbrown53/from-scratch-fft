@@ -17,19 +17,19 @@ std::vector<std::complex<double>> dft(const std::vector<std::complex<double>>& i
 
     for (int k = 0; k < N; k++) { // for each freq
         for (int n = 0; n < N; n++) { // for each input sample
-            output[k] += input[n] * std::pow(twiddle_factor, k * n);
+            output[k] += input[n] * std::pow(twiddle_factor, k * n); // TODO: stop recomputing twiddle factor every time
         }
     }
 
     return output;
 }
 
-// Radix-2 fast Fourier transform
+// Recursive radix-2 fast Fourier transform
 std::vector<std::complex<double>> fft(const std::vector<std::complex<double>>& input) {
     
     // check that FFT size is power of two
     const int N = input.size();
-    assert(N > 0 && (N & (N-1)) == 0);
+    assert(N > 0 && (N & (N-1)) == 0); // clever bitwise operation trick
 
     // base case: 1-point DFT is just the sample itself
     if (N == 1) {
@@ -55,10 +55,12 @@ std::vector<std::complex<double>> fft(const std::vector<std::complex<double>>& i
     // combine results
     std::vector<std::complex<double>> output(N);
     std::complex<double> twiddle_factor = std::exp(std::complex<double>(0.0, -2 * M_PI / N));
-    for (int k = 0; k < N/2; k++) {
+    for (int k = 0; k < N/2; k++) { // TODO: stop recomputing twiddle factor every time
         output[k] = output1[k] + std::pow(twiddle_factor, k) * output2[k];
         output[k + N/2] = output1[k] - std::pow(twiddle_factor, k) * output2[k];
     }
 
     return output;
 }
+
+// TODO: next step is iterative, in-place using bit-reversed ordering
