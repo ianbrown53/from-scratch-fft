@@ -12,7 +12,7 @@ int main() {
         {0.0, 0.0}
     };
 
-    std::vector<std::complex<double>> output = dft(input);
+    std::vector<std::complex<double>> output = fft(input);
 
     for (int i = 0; i < output.size(); i++) {
         std::cout << output[i] << std::endl;

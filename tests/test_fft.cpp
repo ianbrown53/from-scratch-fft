@@ -4,13 +4,14 @@
 #include <iostream>
 #include <vector>
 #include <cassert>
+#include <chrono>
 
 bool approx_equal(const std::complex<double>& a, const std::complex<double>& b, double tol = 1e-9) {
     return std::abs(a - b) < tol;
 }
 
 void test(const std::string& name, const std::vector<std::complex<double>>& input, const std::vector<std::complex<double>>& expected) {
-    std::vector<std::complex<double>> output = dft(input);
+    std::vector<std::complex<double>> output = fft(input);
     assert(output.size() == input.size());
 
     for (int i = 0; i < output.size(); i++) {
@@ -55,7 +56,11 @@ int main() {
         input[i] = std::exp(std::complex<double>(0.0, 2 * M_PI * i * bin / test_size));
     }
     expected[bin] = std::complex<double>(test_size, 0.0);
+    auto start = std::chrono::steady_clock::now(); // time this one
     test(std::string("Sinusoid test"), input, expected);
+    auto end = std::chrono::steady_clock::now();
+    auto duration = std::chrono::duration<double, std::milli>(end - start);
+    std::cout << "Time: " << duration.count() << " ms" << std::endl;
 
     return 0;
 }

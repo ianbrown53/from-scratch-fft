@@ -2,7 +2,7 @@
 
 ## About
 
-Trying to write my own FFT algorithm from scratch without help.
+Trying to write my own FFT algorithm from scratch without help to brush up on C++ and DSP fundamentals.
 
 ## How to Run
 
